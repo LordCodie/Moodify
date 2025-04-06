@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useState } from 'react'
 import GenreComponent from './-Genre'
 
 export const Route = createFileRoute('/generate/')({
@@ -9,12 +9,12 @@ export const Route = createFileRoute('/generate/')({
 function RouteComponent() {
     const categoryStateArray = ["genre", "acousticness", "danceability", "energy", "instrumentalness", "emtion", "popularity", "valence"]
 
-    // const [categoryState, setcategoryState] = useEffect(0)
+    const [categoryState, setcategoryState] = useState(0)
 
-    // console.log("current category state:", categoryStateArray[categoryState])
+    console.log("current category state:", categoryStateArray[categoryState])
 
     return (
-        <div>
+        <div className='min-h-screen'>
             <GenreComponent />
         </div>
     )
