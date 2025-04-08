@@ -1,6 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import GenreComponent from './-Genre'
+
+import GenreComponent from './-genre'
+import AcousticnessComponent from './-acousticness'
+import DanceabilityComponent from './-danceability'
+import EnergyComponent from './-energy'
+import InstrumentalnessComponent from './-instrumentalness'
+import EmotionComponent from './-emotion'
 
 export const Route = createFileRoute('/generate/')({
     component: RouteComponent,
@@ -31,6 +37,11 @@ function RouteComponent() {
     return (
         <div className='min-h-screen'>
             {step === 0 && <GenreComponent handleNext={handleNext} />}
+            {step === 1 && <AcousticnessComponent handleNext={handleNext}/>}
+            {step === 2 && <DanceabilityComponent handleNext={handleNext}/>}
+            {step === 3 && <EnergyComponent handleNext={handleNext}/>}
+            {step === 4 && <InstrumentalnessComponent handleNext={handleNext}/>}
+            {step === 5 && <EmotionComponent handleNext={handleNext}/>}
         </div>
     )
 }

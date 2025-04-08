@@ -10,9 +10,25 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 
-export default function GenreComponent({ handleNext }) {
+export default function EnergyComponent({ handleNext }) {
 
-    const genres = ["Hip-Hop", "R&B", "House", "Pop"]
+    const energy = [
+        {
+            id: 1,
+            level: 'Low Energy',
+            value: 0
+        },
+        {
+            id: 2,
+            level: 'Mid Energy',
+            value: 0.5
+        },
+        {
+            id: 3,
+            level: 'High Energy',
+            value: 1
+        }
+    ]
 
     const [selected, setSelected] = useState("")
 
@@ -21,23 +37,23 @@ export default function GenreComponent({ handleNext }) {
             <Card className="bg-white mt-16">
 
                 <CardHeader>
-                    <CardTitle className="text-center text-xl">Pick Your Favourite Genre</CardTitle>
+                    <CardTitle className="text-center text-xl">Choose Song Energy Level</CardTitle>
                     {/* <CardDescription>Card Description</CardDescription> */}
                 </CardHeader>
 
                 <CardContent>
 
                     <div className="md:flex justify-center items-center flex-wrap">
-                        {genres.map((genre) => (
+                        {energy.map((e) => (
                             <div
-                                key={genre}
-                                onClick={() => setSelected(genre)}
+                                key={e.id}
+                                onClick={() => setSelected(e.value)}
                                 className={cn(
                                     "cursor-pointer text-center text-white font-semibold border rounded-xl mr-4 mb-8 p-16 transition-colors duration-300",
-                                    selected === genre ? "bg-[#F4AC45]" : "bg-[#F42C04] hover:bg-[#F4AC45]"
+                                    selected === e.value ? "bg-[#F4AC45]" : "bg-[#F42C04] hover:bg-[#F4AC45]"
                                 )}
                             >
-                                {genre}
+                                {e.level}
                             </div>
                         ))}
                     </div>
