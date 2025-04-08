@@ -10,56 +10,59 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 
-export default function EnergyComponent({ handleNext, handleEnergy }) {
+export default function PopularityComponent({ handleNext, handlePopularity }) {
     const [selected, setSelected] = useState(null)
 
     const isNextDisabled = selected === null
 
-    const energy = [
+    const popularity = [
         {
             id: 1,
-            level: 'Low Energy',
+            label: "I don't want popular songs",
             value: 0
         },
         {
             id: 2,
-            level: 'Mid Energy',
-            value: 0.5
+            label: "I don't really care",
+            value: 50
         },
         {
             id: 3,
-            level: 'High Energy',
-            value: 1
-        }
+            label: "I want something popular",
+            value: 100
+        },
     ]
+
 
     return (
         <div className="p-12">
             <Card className="bg-white mt-16">
 
                 <CardHeader>
-                    <CardTitle className="text-center text-xl">Choose Song Energy Level</CardTitle>
+                    <CardTitle className="text-center text-xl">Do You Want Popular Songs</CardTitle>
                     {/* <CardDescription>Card Description</CardDescription> */}
                 </CardHeader>
 
                 <CardContent>
 
                     <div className="md:flex justify-center items-center flex-wrap">
-                        {energy.map((e) => (
-                            <div
-                                key={e.id}
-                                onClick={() => {
-                                    setSelected(e.value)
-                                    handleEnergy(e.value)
-                                }}
-                                className={cn(
-                                    "cursor-pointer text-center text-white font-semibold border rounded-xl mr-4 mb-8 p-16 transition-colors duration-300",
-                                    selected === e.value ? "bg-[#F4AC45]" : "bg-[#F42C04] hover:bg-[#F4AC45]"
-                                )}
-                            >
-                                {e.level}
-                            </div>
-                        ))}
+                        <div>
+                            {popularity.map((e) => (
+                                <div
+                                    key={e.id}
+                                    onClick={() => {
+                                        setSelected(e.id)
+                                        handlePopularity(e.value)
+                                    }}
+                                    className={cn(
+                                        "cursor-pointer text-center text-white font-semibold border rounded-xl mr-4 mb-8 px-24 transition-colors duration-300",
+                                        selected === e.id ? "bg-[#F4AC45]" : "bg-[#F42C04] hover:bg-[#F4AC45]"
+                                    )}
+                                >
+                                    {e.label}
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                 </CardContent>

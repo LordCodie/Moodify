@@ -15,7 +15,7 @@ function Index() {
 
       <div className='mt-26 flex justify-center gap-4 sm:row'>
         <Button className="bg-black text-white mr-4 text-lg p-6">
-          <Link to="/sign-up">Get Started</Link>
+          <Link to="/generate">Get Started</Link>
         </Button>
         <Button className="bg-black text-white text-lg p-6">
           <Link to="/login">Log In</Link>

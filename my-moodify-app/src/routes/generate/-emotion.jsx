@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 
-export default function EmotionComponent({ handleNext }) {
+export default function EmotionComponent({ handleNext, handleEmotion }) {
 
     const genres = [
         {
@@ -19,7 +19,7 @@ export default function EmotionComponent({ handleNext }) {
         }, 
         {
             label: "Happy",
-            value: 0
+            value: 1
         }
     ]
 
@@ -40,7 +40,10 @@ export default function EmotionComponent({ handleNext }) {
                         {genres.map((e) => (
                             <div
                                 key={e.label}
-                                onClick={() => setSelected(e.value)}
+                                onClick={() => {
+                                    setSelected(e.value)
+                                    handleEmotion(e.value)
+                                }}
                                 className={cn(
                                     "cursor-pointer text-center text-white font-semibold border rounded-xl mr-4 mb-8 p-16 transition-colors duration-300",
                                     selected === e.value ? "bg-[#F4AC45]" : "bg-[#F42C04] hover:bg-[#F4AC45]"
