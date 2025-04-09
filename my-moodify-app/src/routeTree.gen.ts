@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SignUpIndexImport } from './routes/sign-up/index'
+import { Route as RecommendationsIndexImport } from './routes/recommendations/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as GenerateIndexImport } from './routes/generate/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
@@ -28,6 +29,12 @@ const IndexRoute = IndexImport.update({
 const SignUpIndexRoute = SignUpIndexImport.update({
   id: '/sign-up/',
   path: '/sign-up/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RecommendationsIndexRoute = RecommendationsIndexImport.update({
+  id: '/recommendations/',
+  path: '/recommendations/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -81,6 +88,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
+    '/recommendations/': {
+      id: '/recommendations/'
+      path: '/recommendations'
+      fullPath: '/recommendations'
+      preLoaderRoute: typeof RecommendationsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/sign-up/': {
       id: '/sign-up/'
       path: '/sign-up'
@@ -98,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardIndexRoute
   '/generate': typeof GenerateIndexRoute
   '/login': typeof LoginIndexRoute
+  '/recommendations': typeof RecommendationsIndexRoute
   '/sign-up': typeof SignUpIndexRoute
 }
 
@@ -106,6 +121,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/generate': typeof GenerateIndexRoute
   '/login': typeof LoginIndexRoute
+  '/recommendations': typeof RecommendationsIndexRoute
   '/sign-up': typeof SignUpIndexRoute
 }
 
@@ -115,15 +131,35 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/generate/': typeof GenerateIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/recommendations/': typeof RecommendationsIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/generate' | '/login' | '/sign-up'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/generate'
+    | '/login'
+    | '/recommendations'
+    | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/generate' | '/login' | '/sign-up'
-  id: '__root__' | '/' | '/dashboard/' | '/generate/' | '/login/' | '/sign-up/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/generate'
+    | '/login'
+    | '/recommendations'
+    | '/sign-up'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard/'
+    | '/generate/'
+    | '/login/'
+    | '/recommendations/'
+    | '/sign-up/'
   fileRoutesById: FileRoutesById
 }
 
@@ -132,6 +168,7 @@ export interface RootRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   GenerateIndexRoute: typeof GenerateIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
+  RecommendationsIndexRoute: typeof RecommendationsIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
 }
 
@@ -140,6 +177,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   GenerateIndexRoute: GenerateIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
+  RecommendationsIndexRoute: RecommendationsIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,
 }
 
@@ -157,6 +195,7 @@ export const routeTree = rootRoute
         "/dashboard/",
         "/generate/",
         "/login/",
+        "/recommendations/",
         "/sign-up/"
       ]
     },
@@ -171,6 +210,9 @@ export const routeTree = rootRoute
     },
     "/login/": {
       "filePath": "login/index.jsx"
+    },
+    "/recommendations/": {
+      "filePath": "recommendations/index.jsx"
     },
     "/sign-up/": {
       "filePath": "sign-up/index.jsx"

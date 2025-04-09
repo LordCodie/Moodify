@@ -10,10 +10,6 @@ import InstrumentalnessComponent from './-instrumentalness'
 import EmotionComponent from './-emotion'
 import PopularityComponent from './-popularity'
 
-export const Route = createFileRoute('/generate/')({
-    component: RouteComponent,
-})
-
 const categoryStateArray = [
     "genre",
     "acousticness",
@@ -24,18 +20,14 @@ const categoryStateArray = [
     "popularity"
 ]
 
+export const Route = createFileRoute('/generate/')({
+    component: RouteComponent,
+})
+
 function RouteComponent() {
     const navigate = useNavigate()
 
     const [step, setStep] = useState(0)
-
-    const [genre, setGenre] = useState()
-    const [acousticness, setAcousticness] = useState()
-    const [danceability, setDanceability] = useState()
-    const [energy, setEnergy] = useState()
-    const [instrumentalness, setInstrumentalness] = useState()
-    const [emotion, setEmotion] = useState()
-    const [popularity, setPopularity] = useState()
 
     const handleNext = () => {
         if (step < categoryStateArray.length - 1) {
@@ -45,7 +37,7 @@ function RouteComponent() {
 
     const handleSubmit = async () => {
         console.log('submission button clicked')
-        navigate({ to: '/dashboard' })
+        navigate({ to: '/recommendations' })
 
         // localStorage.setItem('userSelections', JSON.stringify({
         //     genre: genre,
@@ -56,21 +48,9 @@ function RouteComponent() {
         //     emotion: emotion,
         //     popularity: popularity
         // }))
-
-        // const data = await fetch('')
-        // const response = await data.json()
     }
 
     // console.log("current category state:", categoryStateArray[step])
-    console.log("current selections:", {
-        genre: genre,
-        acousticness: acousticness,
-        danceability: danceability,
-        energy: energy,
-        instrumentalness: instrumentalness,
-        emotion: emotion,
-        popularity: popularity
-    })
 
     return (
         <div className='min-h-screen'>

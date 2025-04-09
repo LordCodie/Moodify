@@ -1,0 +1,99 @@
+{
+    "seeds": [
+        {
+            "afterFilteringSize": 5,
+            "afterRelinkingSize": 5,
+            "href": "https://api.spotify.com/v1/recommendations/seed/track:6rqhFgbbKwnb9MLmUQDhG6",
+            "id": "6rqhFgbbKwnb9MLmUQDhG6",
+            "initialPoolSize": 15,
+            "type": "track"
+        }
+    ],
+    "tracks": [
+        {
+            "album": {
+                "album_type": "album",
+                "total_tracks": 12,
+                "available_markets": [
+                    "CA",
+                    "BR",
+                    "IT"
+                ],
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/album/2up3OPMp9Tb4dAKM2erWXQ"
+                },
+                "href": "https://api.spotify.com/v1/albums/2up3OPMp9Tb4dAKM2erWXQ",
+                "id": "2up3OPMp9Tb4dAKM2erWXQ",
+                "images": [
+                    {
+                        "url": "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+                        "height": 300,
+                        "width": 300
+                    }
+                ],
+                "name": "Mock Album",
+                "release_date": "2020-01-01",
+                "release_date_precision": "day",
+                "restrictions": {
+                    "reason": "market"
+                },
+                "type": "album",
+                "uri": "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/0OdUWJ0sBjDrqHygGUXeCF",
+                        "id": "0OdUWJ0sBjDrqHygGUXeCF",
+                        "name": "Mock Artist",
+                        "type": "artist",
+                        "uri": "spotify:artist:0OdUWJ0sBjDrqHygGUXeCF"
+                    }
+                ]
+            },
+            "artists": [
+                {
+                    "external_urls": {
+                        "spotify": "https://open.spotify.com/artist/0OdUWJ0sBjDrqHygGUXeCF"
+                    },
+                    "href": "https://api.spotify.com/v1/artists/0OdUWJ0sBjDrqHygGUXeCF",
+                    "id": "0OdUWJ0sBjDrqHygGUXeCF",
+                    "name": "Mock Artist",
+                    "type": "artist",
+                    "uri": "spotify:artist:0OdUWJ0sBjDrqHygGUXeCF"
+                }
+            ],
+            "available_markets": [
+                "CA",
+                "BR",
+                "IT"
+            ],
+            "disc_number": 1,
+            "duration_ms": 200000,
+            "explicit": false,
+            "external_ids": {
+                "isrc": "MOCKISRC12345",
+                "ean": "MOCKEAN12345",
+                "upc": "MOCKUPC12345"
+            },
+            "external_urls": {
+                "spotify": "https://open.spotify.com/track/mock"
+            },
+            "href": "https://api.spotify.com/v1/tracks/mock",
+            "id": "mock-track-id",
+            "is_playable": true,
+            "linked_from": {},
+            "restrictions": {
+                "reason": "market"
+            },
+            "name": "Mock Track",
+            "popularity": 75,
+            "preview_url": "https://p.scdn.co/mp3-preview/mock",
+            "track_number": 1,
+            "type": "track",
+            "uri": "spotify:track:mock-track-id",
+            "is_local": false
+        }
+    ]
+}

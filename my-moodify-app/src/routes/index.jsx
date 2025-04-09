@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useUserSelections } from '@/context/userSelectionsContext'
 
 import { Button } from "@/components/ui/button"
 
@@ -7,6 +8,18 @@ export const Route = createFileRoute('/')({
 })
 
 function Index() {
+  const { genre, acousticness, danceability, energy, instrumentalness, emotion, popularity } = useUserSelections()
+
+  console.log("current selections:", {
+    genre: genre,
+    acousticness: acousticness,
+    danceability: danceability,
+    energy: energy,
+    instrumentalness: instrumentalness,
+    emotion: emotion,
+    popularity: popularity
+  })
+
   return (
     <div className="p-8 min-h-screen">
       <h1 className='mt-36 text-5xl font-light text-center leading-16 text-shadow-md'>
