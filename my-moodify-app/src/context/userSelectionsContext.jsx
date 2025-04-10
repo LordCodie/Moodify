@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const UserSelectionsContext = createContext()
 
@@ -22,9 +22,9 @@ export const UserSelectionsProvider = ({ children }) => {
     }
 
     return (
-        <UserSelectionsProvider.Prpvider value={value}>
+        <UserSelectionsContext.Provider value={value}>
             {children}
-        </UserSelectionsProvider.Prpvider>
+        </UserSelectionsContext.Provider>
     )
 }
 

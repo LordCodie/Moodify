@@ -1,5 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { Button } from '@/components/ui/button'
+
+import SongsBlock from './-songsBlock'
+
 export const Route = createFileRoute('/recommendations/')({
     component: RouteComponent,
 })
@@ -7,7 +11,7 @@ export const Route = createFileRoute('/recommendations/')({
 function RouteComponent() {
     return (
         <div className='min-h-screen'>
-            Your recommendations will load here!
+            <SongsBlock />
         </div>
     )
 }

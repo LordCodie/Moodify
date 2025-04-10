@@ -1,6 +1,10 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+
 import { useState } from 'react'
+
 import { Button } from '@/components/ui/button'
+
+import { useUserSelections } from '@/context/userSelectionsContext'
 
 import GenreComponent from './-genre'
 import AcousticnessComponent from './-acousticness'
@@ -27,6 +31,16 @@ export const Route = createFileRoute('/generate/')({
 function RouteComponent() {
     const navigate = useNavigate()
 
+    const {
+        setGenre,
+        setAcousticness,
+        setDanceability,
+        setEnergy,
+        setInstrumentalness,
+        setEmotion,
+        setPopularity
+    } = useUserSelections()
+
     const [step, setStep] = useState(0)
 
     const handleNext = () => {
@@ -51,7 +65,7 @@ function RouteComponent() {
     }
 
     // console.log("current category state:", categoryStateArray[step])
-
+      
     return (
         <div className='min-h-screen'>
 
