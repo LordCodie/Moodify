@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as SignUpIndexImport } from './routes/sign-up/index'
+import { Route as SavedPlaylistsIndexImport } from './routes/saved-playlists/index'
 import { Route as RecommendationsIndexImport } from './routes/recommendations/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as GenerateIndexImport } from './routes/generate/index'
@@ -29,6 +30,12 @@ const IndexRoute = IndexImport.update({
 const SignUpIndexRoute = SignUpIndexImport.update({
   id: '/sign-up/',
   path: '/sign-up/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SavedPlaylistsIndexRoute = SavedPlaylistsIndexImport.update({
+  id: '/saved-playlists/',
+  path: '/saved-playlists/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecommendationsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/saved-playlists/': {
+      id: '/saved-playlists/'
+      path: '/saved-playlists'
+      fullPath: '/saved-playlists'
+      preLoaderRoute: typeof SavedPlaylistsIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/sign-up/': {
       id: '/sign-up/'
       path: '/sign-up'
@@ -113,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/generate': typeof GenerateIndexRoute
   '/login': typeof LoginIndexRoute
   '/recommendations': typeof RecommendationsIndexRoute
+  '/saved-playlists': typeof SavedPlaylistsIndexRoute
   '/sign-up': typeof SignUpIndexRoute
 }
 
@@ -122,6 +137,7 @@ export interface FileRoutesByTo {
   '/generate': typeof GenerateIndexRoute
   '/login': typeof LoginIndexRoute
   '/recommendations': typeof RecommendationsIndexRoute
+  '/saved-playlists': typeof SavedPlaylistsIndexRoute
   '/sign-up': typeof SignUpIndexRoute
 }
 
@@ -132,6 +148,7 @@ export interface FileRoutesById {
   '/generate/': typeof GenerateIndexRoute
   '/login/': typeof LoginIndexRoute
   '/recommendations/': typeof RecommendationsIndexRoute
+  '/saved-playlists/': typeof SavedPlaylistsIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
 }
 
@@ -143,6 +160,7 @@ export interface FileRouteTypes {
     | '/generate'
     | '/login'
     | '/recommendations'
+    | '/saved-playlists'
     | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -151,6 +169,7 @@ export interface FileRouteTypes {
     | '/generate'
     | '/login'
     | '/recommendations'
+    | '/saved-playlists'
     | '/sign-up'
   id:
     | '__root__'
@@ -159,6 +178,7 @@ export interface FileRouteTypes {
     | '/generate/'
     | '/login/'
     | '/recommendations/'
+    | '/saved-playlists/'
     | '/sign-up/'
   fileRoutesById: FileRoutesById
 }
@@ -169,6 +189,7 @@ export interface RootRouteChildren {
   GenerateIndexRoute: typeof GenerateIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   RecommendationsIndexRoute: typeof RecommendationsIndexRoute
+  SavedPlaylistsIndexRoute: typeof SavedPlaylistsIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
 }
 
@@ -178,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   GenerateIndexRoute: GenerateIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   RecommendationsIndexRoute: RecommendationsIndexRoute,
+  SavedPlaylistsIndexRoute: SavedPlaylistsIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,
 }
 
@@ -196,6 +218,7 @@ export const routeTree = rootRoute
         "/generate/",
         "/login/",
         "/recommendations/",
+        "/saved-playlists/",
         "/sign-up/"
       ]
     },
@@ -213,6 +236,9 @@ export const routeTree = rootRoute
     },
     "/recommendations/": {
       "filePath": "recommendations/index.jsx"
+    },
+    "/saved-playlists/": {
+      "filePath": "saved-playlists/index.jsx"
     },
     "/sign-up/": {
       "filePath": "sign-up/index.jsx"

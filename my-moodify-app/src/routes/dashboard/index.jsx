@@ -14,7 +14,7 @@ function RouteComponent() {
                   <Link to="/generate">Start Moodifying</Link>
                 </Button>
                 <Button className="bg-black text-white text-lg p-6">
-                  <Link to="/">Saved Playlists</Link>
+                  <Link to="/saved-playlists">Saved Playlists</Link>
                 </Button>
               </div>
     </div>

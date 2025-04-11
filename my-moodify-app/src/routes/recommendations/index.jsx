@@ -10,7 +10,7 @@ export const Route = createFileRoute('/recommendations/')({
 
 function RouteComponent() {
     return (
-        <div className='min-h-screen'>
+        <div className='max-h-screen flex justify-center items-center'>
             <SongsBlock />
         </div>
     )
