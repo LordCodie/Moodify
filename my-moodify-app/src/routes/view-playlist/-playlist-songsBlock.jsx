@@ -8,32 +8,41 @@ import {
 } from "@/components/ui/card"
 import { Button } from '@/components/ui/button'
 import { Link } from "@tanstack/react-router"
-import SongsTable from "@/routes/recommendations/-songs-table"
-import SavePlaylistPopover from "@/routes/recommendations/-saveplaylist-popover"
+import PlaylistsSongsTable from "./-playlist-songs-table"
+import DeletePlaylistPopover from "./-deleteplaylist-popover"
 
-export default function SongsBlock() {
+export default function PlaylistSongsBlock({ title }) {
     return (
         <div className="p-4 sm:p-6 md:p-12">
+
+            <div className='flex justify-end items-end p-4'>
+                <Button className='text-white bg-black'>
+                    <Link to='/dashboard'>Back home</Link>
+                </Button>
+            </div>
+
             <Card className="bg-white mt-10 w-full max-w-full md:max-w-4xl mx-auto">
 
                 <CardHeader>
-                    <CardTitle className="text-center text-xl">Your Song Recommendations</CardTitle>
+                    <CardTitle className="text-center text-xl">{title}</CardTitle>
                 </CardHeader>
 
                 <CardContent>
                     <div className="flex justify-center items-center">
-                        <div className="md:min-w-xl min-w-sm">
-                            <SongsTable />
+                        <div className="md:min-w-full min-w-sm">
+                            <PlaylistsSongsTable />
                         </div>
                     </div>
                 </CardContent>
 
                 <CardFooter className="w-full">
                     <div className="w-full flex justify-center items-center">
-                        <SavePlaylistPopover />
-                        <Button className='text-white bg-black'>
-                            <Link to='/dashboard'>Back home</Link>
-                        </Button>
+
+                        {/* <Button className='text-white bg-black'>
+                            Delete Playlist
+                        </Button> */}
+
+                        <DeletePlaylistPopover />
                     </div>
                 </CardFooter>
 

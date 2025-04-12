@@ -4,27 +4,10 @@ import { useUserSelections } from "@/context/userSelectionsContext";
 const DevStateLogger = () => {
     const state = useUserSelections()
 
-    const {
-        genre,
-        acousticness,
-        danceability,
-        energy,
-        instrumentalness,
-        emotion,
-        popularity
-    } = state
+    const { feeling } = state
 
     useEffect(() => {
-        console.log('User Selections:', {
-            genre,
-            acousticness,
-            danceability,
-            energy,
-            instrumentalness,
-            emotion,
-            popularity
-        })
-
+        console.log('User Selections:', feeling)
         console.log(state)
     }, [state])
 

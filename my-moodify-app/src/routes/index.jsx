@@ -9,12 +9,12 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className="p-8 min-h-screen">
-      <h1 className='mt-36 text-5xl font-light text-center leading-16 text-shadow-md'>
+    <div className="">
+      <h1 className='py-36 px-12 text-5xl font-light text-center leading-16 text-shadow-md'>
         Welcome To <span className='font-bold text-[#F4AC45] underline underline-offset-[8px] decoration-dashed decoration-[#F42C04]'>Moodify</span>! <br /> Tell Us How You're Feeling, and we'll suggests some songs  for you to listen to!
       </h1>
 
-      <div className='mt-26 flex justify-center gap-4 sm:row'>
+      <div className='flex justify-center gap-4 sm:row'>
         <Button className="bg-black text-white mr-4 text-lg p-6">
           <Link to="/generate">Get Started</Link>
         </Button>
@@ -22,7 +22,6 @@ function Index() {
           <Link to="/login">Log In</Link>
         </Button>
       </div>
-
     </div>
   )
 }

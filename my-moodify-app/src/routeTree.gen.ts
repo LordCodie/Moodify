@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as ViewPlaylistIndexImport } from './routes/view-playlist/index'
 import { Route as SignUpIndexImport } from './routes/sign-up/index'
 import { Route as SavedPlaylistsIndexImport } from './routes/saved-playlists/index'
 import { Route as RecommendationsIndexImport } from './routes/recommendations/index'
@@ -24,6 +25,12 @@ import { Route as DashboardIndexImport } from './routes/dashboard/index'
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ViewPlaylistIndexRoute = ViewPlaylistIndexImport.update({
+  id: '/view-playlist/',
+  path: '/view-playlist/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -116,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignUpIndexImport
       parentRoute: typeof rootRoute
     }
+    '/view-playlist/': {
+      id: '/view-playlist/'
+      path: '/view-playlist'
+      fullPath: '/view-playlist'
+      preLoaderRoute: typeof ViewPlaylistIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -129,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/recommendations': typeof RecommendationsIndexRoute
   '/saved-playlists': typeof SavedPlaylistsIndexRoute
   '/sign-up': typeof SignUpIndexRoute
+  '/view-playlist': typeof ViewPlaylistIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -139,6 +154,7 @@ export interface FileRoutesByTo {
   '/recommendations': typeof RecommendationsIndexRoute
   '/saved-playlists': typeof SavedPlaylistsIndexRoute
   '/sign-up': typeof SignUpIndexRoute
+  '/view-playlist': typeof ViewPlaylistIndexRoute
 }
 
 export interface FileRoutesById {
@@ -150,6 +166,7 @@ export interface FileRoutesById {
   '/recommendations/': typeof RecommendationsIndexRoute
   '/saved-playlists/': typeof SavedPlaylistsIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
+  '/view-playlist/': typeof ViewPlaylistIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -162,6 +179,7 @@ export interface FileRouteTypes {
     | '/recommendations'
     | '/saved-playlists'
     | '/sign-up'
+    | '/view-playlist'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -171,6 +189,7 @@ export interface FileRouteTypes {
     | '/recommendations'
     | '/saved-playlists'
     | '/sign-up'
+    | '/view-playlist'
   id:
     | '__root__'
     | '/'
@@ -180,6 +199,7 @@ export interface FileRouteTypes {
     | '/recommendations/'
     | '/saved-playlists/'
     | '/sign-up/'
+    | '/view-playlist/'
   fileRoutesById: FileRoutesById
 }
 
@@ -191,6 +211,7 @@ export interface RootRouteChildren {
   RecommendationsIndexRoute: typeof RecommendationsIndexRoute
   SavedPlaylistsIndexRoute: typeof SavedPlaylistsIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
+  ViewPlaylistIndexRoute: typeof ViewPlaylistIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -201,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecommendationsIndexRoute: RecommendationsIndexRoute,
   SavedPlaylistsIndexRoute: SavedPlaylistsIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,
+  ViewPlaylistIndexRoute: ViewPlaylistIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -219,7 +241,8 @@ export const routeTree = rootRoute
         "/login/",
         "/recommendations/",
         "/saved-playlists/",
-        "/sign-up/"
+        "/sign-up/",
+        "/view-playlist/"
       ]
     },
     "/": {
@@ -242,6 +265,9 @@ export const routeTree = rootRoute
     },
     "/sign-up/": {
       "filePath": "sign-up/index.jsx"
+    },
+    "/view-playlist/": {
+      "filePath": "view-playlist/index.jsx"
     }
   }
 }
