@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "test:run": "jest",
-    "test": "firebase emulators:exec --only auth,firestore \"npm run test:run\"",
+    "test": "firebase emulators:exec --config ./firebase-project/firebase.json --only auth,firestore \"npm run test:run\"",
     "preview": "vite preview"
   },
   "dependencies": {
