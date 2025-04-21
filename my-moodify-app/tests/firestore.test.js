@@ -1,54 +1,60 @@
 const { getAuth } = require("firebase/auth")
 const { getFirestore } = require("firebase/firestore")
 
-const { signUp, signIn, passwordReset } = require("../../my-moodify-app/tests/jest.setup")
+const { signUp, signIn, passwordReset, deleteUserAccount, googleSignIn } = require("../../my-moodify-app/tests/jest.setup")
 
 let auth, db
 
 const mockUser = {
-    email: "mock@example.com",
-    username: "mokzy",
+    email: "skyler.peaceful89@novaxmail.net",
+    username: "Mokzy",
     password: "password01"
 }
 
 beforeAll(() => {
     auth = getAuth(global.firebaseApp)
     db = getFirestore(global.firebaseApp)
+    // deleteUserAccount(auth)
+    console.info('running...')
 })
 
 describe("authenication tests", () => {
 
     test("create an account", async () => {
-        const createdAccount = await signUp(auth, mockUser.email, mockUser.password)
-        await expect(Promise.resolve(createdAccount)).resolves.toBeDefined()
+        const res = await signUp(auth, mockUser.email, mockUser.password, mockUser.username)
+        expect(res).toEqual({ succes: true, message: `User succesfully signed-up` })
     })
 
     test("sign-in an account", async() => {
-        const signInAccount = await signIn(auth, mockUser.email, mockUser.password)
-        await expect(Promise.resolve(signInAccount)).resolves.toBeDefined()
+        const res = await signIn(auth, mockUser.email, mockUser.password)
+        expect(res).toEqual({ succes: true, message: `User succesfully signed-in` })
     })
+
+    // test("sign-in with google account", async() => {
+    //     const res = await googleSignIn(auth) 
+    //     expect(res).toEqual({ succes: true, message: `User signed-in with google` })
+    // })
 
     test("forgot password", async() => {
-        const resetPassword = await passwordReset(auth, mockUser.email)
-        await expect(Promise.resolve(resetPassword)).resolves.toBeDefined()
-    })
-})
-
-describe("firestore tests", () => {
-
-    test("set username", async() => {
-
-    })
-
-    test("name and save playlists", async() => {
-
-    })
-
-    test("delete playlists", async() => {
-
+        const res = await passwordReset(auth, mockUser.email)
+        expect(res).toEqual({ success: true, message: "Password reset email sent!" })
     })
 
 })
 
-// afterAll()
+// describe("firestore tests", () => {
+
+//     test("name and save playlists", async() => {
+
+//     })
+
+//     test("delete playlists", async() => {
+
+//     })
+
+// })
+
+afterAll(() => {
+    
+})
 

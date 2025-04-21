@@ -4,9 +4,15 @@ const {
     createUserWithEmailAndPassword,
     connectAuthEmulator,
     signInWithEmailAndPassword,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    deleteUser,
+    sendEmailVerification,
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup,
+    updateProfile
 } = require("firebase/auth")
-const { getFirestore, connectFirestoreEmulator } = require("firebase/firestore")
+const { getFirestore, connectFirestoreEmulator, setDoc, doc } = require("firebase/firestore")
 
 const firebaseConfig = {
     apiKey: "AIzaSyBEqV-XFIOqKo17SQ_BfSFeBZNIERZVogU",
@@ -22,31 +28,73 @@ const app = initializeApp(firebaseConfig);
 connectAuthEmulator(getAuth(app), 'http://localhost:2000')
 connectFirestoreEmulator(getFirestore(app), 'localhost', 2001)
 
-const signUp = async (auth, email, password) => {
-    const createAccount = await createUserWithEmailAndPassword(auth, email, password)
-    const { uid } = await createAccount.user
-    console.log("uid:", uid)
-    return uid
+const baseUrl =
+    process.env.NODE_ENV === 'production'
+        ? 'https://your-app.vercel.app'
+        : 'http://localhost:5173'
+
+const actionCodeSettings = {
+    url: `${baseUrl}/login`,
+    handleCodeInApp: true,
+}
+
+const signUp = async (auth, email, password, username) => {
+    try {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password)
+        await updateProfile(auth.currentUser, { displayName: username })
+        await sendEmailVerification(user, actionCodeSettings)
+        await signOut(auth)
+        return { succes: true, message: `User succesfully signed-up` }
+    } catch (error) {
+        console.log(error)
+        return { succes: false, message: error }
+    }
 }
 
 const signIn = async (auth, email, password) => {
-    const signInAccount = await signInWithEmailAndPassword(auth, email, password)
-    const { uid } = await signInAccount.user
-    console.log("uid:", uid)
-    return uid
+    try {
+        const signInAccount = await signInWithEmailAndPassword(auth, email, password)
+        // const { uid } = await signInAccount.user
+        return { succes: true, message: `User succesfully signed-in` }
+    } catch (error) {
+        console.log(error)
+        return { succes: false, message: error }
+    }
+}
+
+const googleSignIn = async (auth) => {
+    const provider = new GoogleAuthProvider()
+
+    try {
+        await signInWithPopup(auth, provider)
+        return { succes: true, message: `User signed-in with google` }
+    } catch (error) {
+        console.log(error)
+        return { succes: false, message: error }
+    }
 }
 
 const passwordReset = async (auth, email) => {
     try {
         await sendPasswordResetEmail(auth, email)
-        console.log({ success: true, message: "Password reset email sent!" })
+        // console.log({ success: true, message: "Password reset email sent!" })
         return { success: true, message: "Password reset email sent!" }
     } catch (error) {
-        const errorMessage = error.message
-        console.log(errorMessage)
-        return { success: false, message: errorMessage }
+        console.log(error.message)
+        return { success: false, message: error.message }
     }
 }
 
+const deleteUserAccount = async (auth) => {
+    try {
+        await deleteUser(auth.currentUser)
+        return { success: true, message: "User deleted" }
+    } catch (error) {
+        console.log(error)
+        return { succes: false, message: error }
+    }
+
+}
+
 global.firebaseApp = app
-module.exports = { signUp, signIn, passwordReset }
+module.exports = { signUp, signIn, passwordReset, deleteUserAccount, googleSignIn }

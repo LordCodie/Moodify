@@ -6,15 +6,8 @@
     "firestore": {
       "port": 2001
     },
-    "database": {
-      "port": 2002
-    },
-    "pubsub": {
-      "port": 2003
-    },
     "ui": {
-      "enabled": true,
-      "port": 2005
+      "enabled": true
     },
     "singleProjectMode": true
   }
