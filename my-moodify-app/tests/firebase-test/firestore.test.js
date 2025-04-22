@@ -1,7 +1,7 @@
 const { getAuth } = require("firebase/auth")
 const { getFirestore } = require("firebase/firestore")
 
-const { signUp, signIn, passwordReset, deleteUserAccount, googleSignIn } = require("../../my-moodify-app/tests/jest.setup")
+const { signUp, signIn, passwordReset, deleteUserAccount, googleSignIn } = require("../jest.setup")
 
 let auth, db
 
