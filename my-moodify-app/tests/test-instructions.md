@@ -8,6 +8,11 @@ npx jest --selectProjects=firebase
 npx jest --selectProjects=spotify
 ```
 
+### Run Mood Algorithm tests:
+```
+npx jest --selectProjects=sentiment
+```
+
 ### Run all tests:
 ```
 npx jest

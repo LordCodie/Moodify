@@ -16,6 +16,13 @@ const config = {
       setupFiles: ['<rootDir>/tests/spotify-test/jest.setup.js'],
       testEnvironment: "node",
       testTimeout: 30000,
+    },
+    {
+      displayName: 'sentiment',
+      testMatch: ['<rootDir>/tests/mood-algo-test/**/*.test.js'],
+      setupFiles: ['<rootDir>/tests/mood-algo-test/jest.setup.js'],
+      testEnvironment: "node",
+      testTimeout: 30000,
     }
   ]
 }
