@@ -37,10 +37,12 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth()
 const db = getFirestore()
 
-const baseUrl =
-    process.env.NODE_ENV === 'production'
-        ? 'https://your-app.vercel.app'
-        : 'http://localhost:5173'
+// const baseUrl =
+//     process.env.NODE_ENV === 'production'
+//         ? 'https://your-app.vercel.app'
+//         : 'http://localhost:5173'
+
+const baseUrl = 'http://localhost:5173'
 
 const actionCodeSettings = {
     url: `${baseUrl}/login`,

@@ -26,11 +26,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/spotify': {
-        target: 'https://accounts.spotify.com/',
+      '/api/spotify': {
+        target: 'http://localhost:5173',
         changeOrigin: true,
-        secure: true,
-        rewrite: (path) => path.replace(/^\/spotify/, '')
+        secure: false,
+        // rewrite: (path) => path.replace(/^\/spotify/, '')
       }
     },
     watch: {

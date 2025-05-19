@@ -115,9 +115,9 @@ export default function InputComponent() {
                                             (<Button
                                                 type="submit"
                                                 className="bg-[#F4AC45] hover:bg-[#F42C04]"
-                                                disabled={!command}>
+                                                disabled={!command || isSubmitting}>
                                                 {isSubmitting ?
-                                                    <><BlocksShuffleTwo /> Recommending Songs</>
+                                                    <><BlocksShuffleTwo /> Recommending Songs...</>
                                                     :
                                                     <> <Send /> Send</>
                                                 }

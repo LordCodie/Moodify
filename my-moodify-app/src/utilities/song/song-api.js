@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer'
 import { nanoid } from 'nanoid';
+import { env } from 'process';
 
 const clientId = import.meta.env.VITE_CLIENT_ID
 const clientSecret = import.meta.env.VITE_CLIENT_SECRET
@@ -17,22 +18,31 @@ const LASTFM_URL = 'http://ws.audioscrobbler.com/2.0/'
 const BASE = 'https://api.spotify.com/v1/search'
 
 // step 1: Get spotify access token
-const getAccessToken = async () => {
-  if (_token && Date.now() < _expiresAt) return _token
+// const getAccessToken = async () => {
+//   if (_token && Date.now() < _expiresAt) return _token
 
-  const response = await fetch('/spotify/api/token', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64'),
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({ grant_type: 'client_credentials' })
+//   const response = await fetch('/spotify/api/token', {
+//     method: 'POST',
+//     headers: {
+//       'Authorization': 'Basic ' + Buffer.from(`${clientId}:${clientSecret}`).toString('base64'),
+//       'Content-Type': 'application/x-www-form-urlencoded'
+//     },
+//     body: new URLSearchParams({ grant_type: 'client_credentials' })
+//   })
+//   if (!response.ok) throw new Error(`Token error: ${response.statusText}`)
+//   const data = await response.json()
+//   _token = data.access_token
+//   _expiresAt = Date.now() + data.expires_in * 1000
+//   return _token
+// }
+
+async function getToken() {
+  const res = await fetch('/api/spotify/token', { 
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
   })
-  if (!response.ok) throw new Error(`Token error: ${response.statusText}`)
-  const data = await response.json()
-  _token = data.access_token
-  _expiresAt = Date.now() + data.expires_in * 1000
-  return _token
+  const { access_token } = await res.json()
+  return access_token
 }
 
 const buildQuery = ({ mood, artist, genre, timeTag }) => {
@@ -46,7 +56,7 @@ const buildQuery = ({ mood, artist, genre, timeTag }) => {
 
 // step 3: Intialize spotify db func.
 const searchTracks = async (opts, limit = 25) => {
-  const token = await getAccessToken()
+  const token = await getToken()
   const q = encodeURIComponent(buildQuery(opts))
   const url = `${BASE}?q=${q}&type=track&limit=${limit}`
 
@@ -55,7 +65,6 @@ const searchTracks = async (opts, limit = 25) => {
   })
   if (!res.ok) throw new Error(`Search error: ${res.statusText}`)
   const { tracks } = await res.json()
-  // console.log(tracks)
   return tracks.items.map(t => ({
     id: nanoid(),
     name: t.name,
