@@ -13,6 +13,11 @@ npx jest --selectProjects=spotify
 npx jest --selectProjects=sentiment
 ```
 
+### Run User Tests tests:
+```
+npx jest --selectProjects=user-test
+```
+
 ### Run all tests:
 ```
 npx jest

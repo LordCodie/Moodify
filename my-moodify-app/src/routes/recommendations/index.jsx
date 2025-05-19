@@ -1,17 +1,22 @@
-import { createFileRoute } from '@tanstack/react-router'
-
-import { Button } from '@/components/ui/button'
-
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import SongsBlock from './-songsBlock'
 
 export const Route = createFileRoute('/recommendations/')({
-    component: RouteComponent,
+  beforeLoad: ({ context, location }) => {
+    if (!context?.currentUser) {
+      throw redirect({
+        to: '/login',
+        search: { redirect: location.href }
+      })
+    }
+  },
+  component: RouteComponent,
 })
 
 function RouteComponent() {
-    return (
-        <div className='max-h-screen flex justify-center items-center'>
-            <SongsBlock />
-        </div>
-    )
+  return (
+    <div className='flex justify-center items-center'>
+      <SongsBlock/>
+    </div>
+  )
 }

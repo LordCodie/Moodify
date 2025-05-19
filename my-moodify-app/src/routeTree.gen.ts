@@ -18,6 +18,7 @@ import { Route as SavedPlaylistsIndexImport } from './routes/saved-playlists/ind
 import { Route as RecommendationsIndexImport } from './routes/recommendations/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as GenerateIndexImport } from './routes/generate/index'
+import { Route as ForgotPasswordIndexImport } from './routes/forgot-password/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 
 // Create/Update Routes
@@ -64,6 +65,12 @@ const GenerateIndexRoute = GenerateIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ForgotPasswordIndexRoute = ForgotPasswordIndexImport.update({
+  id: '/forgot-password/',
+  path: '/forgot-password/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const DashboardIndexRoute = DashboardIndexImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
@@ -86,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/forgot-password/': {
+      id: '/forgot-password/'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordIndexImport
       parentRoute: typeof rootRoute
     }
     '/generate/': {
@@ -138,6 +152,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/forgot-password': typeof ForgotPasswordIndexRoute
   '/generate': typeof GenerateIndexRoute
   '/login': typeof LoginIndexRoute
   '/recommendations': typeof RecommendationsIndexRoute
@@ -149,6 +164,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/forgot-password': typeof ForgotPasswordIndexRoute
   '/generate': typeof GenerateIndexRoute
   '/login': typeof LoginIndexRoute
   '/recommendations': typeof RecommendationsIndexRoute
@@ -161,6 +177,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/forgot-password/': typeof ForgotPasswordIndexRoute
   '/generate/': typeof GenerateIndexRoute
   '/login/': typeof LoginIndexRoute
   '/recommendations/': typeof RecommendationsIndexRoute
@@ -174,6 +191,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/forgot-password'
     | '/generate'
     | '/login'
     | '/recommendations'
@@ -184,6 +202,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/forgot-password'
     | '/generate'
     | '/login'
     | '/recommendations'
@@ -194,6 +213,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard/'
+    | '/forgot-password/'
     | '/generate/'
     | '/login/'
     | '/recommendations/'
@@ -206,6 +226,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  ForgotPasswordIndexRoute: typeof ForgotPasswordIndexRoute
   GenerateIndexRoute: typeof GenerateIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   RecommendationsIndexRoute: typeof RecommendationsIndexRoute
@@ -217,6 +238,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  ForgotPasswordIndexRoute: ForgotPasswordIndexRoute,
   GenerateIndexRoute: GenerateIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   RecommendationsIndexRoute: RecommendationsIndexRoute,
@@ -237,6 +259,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard/",
+        "/forgot-password/",
         "/generate/",
         "/login/",
         "/recommendations/",
@@ -250,6 +273,9 @@ export const routeTree = rootRoute
     },
     "/dashboard/": {
       "filePath": "dashboard/index.jsx"
+    },
+    "/forgot-password/": {
+      "filePath": "forgot-password/index.jsx"
     },
     "/generate/": {
       "filePath": "generate/index.jsx"

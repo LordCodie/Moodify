@@ -30,7 +30,7 @@ export default function PlaylistSongsBlock({ title }) {
                 <CardContent>
                     <div className="flex justify-center items-center">
                         <div className="md:min-w-full min-w-sm">
-                            <PlaylistsSongsTable />
+                            <PlaylistsSongsTable playlistName={title}/>
                         </div>
                     </div>
                 </CardContent>
@@ -42,7 +42,7 @@ export default function PlaylistSongsBlock({ title }) {
                             Delete Playlist
                         </Button> */}
 
-                        <DeletePlaylistPopover />
+                        <DeletePlaylistPopover playlistName={title}/>
                     </div>
                 </CardFooter>
 

@@ -1,6 +1,5 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
-import { useUserSelections } from '@/context/userSelectionsContext'
 import InputComponent from './-input-component'
 
 export const Route = createFileRoute('/generate/')({
@@ -8,15 +7,6 @@ export const Route = createFileRoute('/generate/')({
 })
 
 function RouteComponent() {
-    const navigate = useNavigate()
-
-    const { feeling, setFeeling } = useUserSelections()
-
-    const handleSubmit = async () => {
-        console.log('submission button clicked')
-        navigate({ to: '/recommendations' })
-    }
-
     return (
         <div className='min-h-screen'>
 
@@ -26,11 +16,7 @@ function RouteComponent() {
                 </Button>
             </div>
 
-            <InputComponent
-                feeling={feeling}
-                handleFeeling={(e) => setFeeling(e.target.value)}
-                handleNext={handleSubmit}
-            />
+            <InputComponent/>
         </div>
     )
 }

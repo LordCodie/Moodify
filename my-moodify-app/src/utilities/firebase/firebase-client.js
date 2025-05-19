@@ -1,28 +1,27 @@
-const { initializeApp } = require("firebase/app")
-const {
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import {
     getAuth,
     createUserWithEmailAndPassword,
-    connectAuthEmulator,
     signInWithEmailAndPassword,
     sendPasswordResetEmail,
-    deleteUser,
     sendEmailVerification,
     signOut,
     GoogleAuthProvider,
     signInWithPopup,
-    updateProfile
-} = require("firebase/auth")
-const {
+    updateProfile,
+} from "firebase/auth"
+import {
     getFirestore,
-    connectFirestoreEmulator,
     setDoc,
     doc,
     getDoc,
     getDocs,
     collection,
     deleteDoc
-} = require("firebase/firestore")
+} from "firebase/firestore"
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBEqV-XFIOqKo17SQ_BfSFeBZNIERZVogU",
     authDomain: "moodify-app-za.firebaseapp.com",
@@ -32,10 +31,11 @@ const firebaseConfig = {
     appId: "1:1087099817512:web:c2b87dfd461e7525db2f1d"
 };
 
-const app = initializeApp(firebaseConfig)
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-connectAuthEmulator(getAuth(app), 'http://localhost:2000')
-connectFirestoreEmulator(getFirestore(app), 'localhost', 2001)
+export const auth = getAuth()
+const db = getFirestore()
 
 const baseUrl =
     process.env.NODE_ENV === 'production'
@@ -47,20 +47,20 @@ const actionCodeSettings = {
     handleCodeInApp: true,
 }
 
-const signUp = async (auth, email, password, username) => {
+export const signUp = async (email, password, username) => {
     try {
         const { user } = await createUserWithEmailAndPassword(auth, email, password)
         await updateProfile(auth.currentUser, { displayName: username })
         await sendEmailVerification(user, actionCodeSettings)
         await signOut(auth)
-        return { succes: true, message: `User succesfully signed-up` }
+        return { success: true, message: `User succesfully signed-up` }
     } catch (error) {
         console.log(error)
-        return { succes: false, message: error }
+        return { success: false, message: error.message }
     }
 }
 
-const signIn = async (auth, email, password) => {
+export const signIn = async (email, password) => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password)
 
@@ -71,27 +71,25 @@ const signIn = async (auth, email, password) => {
                 message: "Please verify your email before signing in."
             }
         }
-        
-        return { succes: true, message: `User succesfully signed-in` }
+
+        return { success: true, message: `User succesfully signed-in` }
     } catch (error) {
         console.log(error)
-        return { succes: false, message: error }
+        return { success: false, message: error.message }
     }
 }
 
-const googleSignIn = async (auth) => {
-    const provider = new GoogleAuthProvider()
-
+export const signUserOut = async () => {
     try {
-        await signInWithPopup(auth, provider)
-        return { succes: true, message: `User signed-in with google` }
+        await signOut(auth)
+        return { success: true, message: 'User is logged out' }
     } catch (error) {
         console.log(error)
-        return { succes: false, message: error }
+        return { success: false, message: error }
     }
 }
 
-const passwordReset = async (auth, email) => {
+export const passwordReset = async (email) => {
     try {
         await sendPasswordResetEmail(auth, email)
         // console.log({ success: true, message: "Password reset email sent!" })
@@ -102,72 +100,73 @@ const passwordReset = async (auth, email) => {
     }
 }
 
-const deleteUserAccount = async (auth) => {
+export const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider()
     try {
-        await deleteUser(auth.currentUser)
-        return { success: true, message: "User deleted" }
+        await signInWithPopup(auth, provider)
+        return { success: true, message: `User signed-in with google` }
     } catch (error) {
         console.log(error)
-        return { succes: false, message: error }
+        return { success: false, message: error }
     }
 }
 
-const saveplaylist = async (db, uid, playlistName, songData) => {
+export const saveplaylist = async (uid, playlistName, songData) => {
+    const data = {
+        ownerId: uid,
+        playlistName,
+        songData
+    }
+
     try {
-        await setDoc(
-            doc(db, `saved-playlists`, uid, 'playlists', playlistName),
-            songData
-        )
-        return `${playlistName} by ${uid} successfully stored`
+        await setDoc(doc(db, `saved-playlists`, uid, 'playlists', playlistName), data)
+        return { success: true, message: `${playlistName} by ${uid} successfully stored` }
     } catch (error) {
         console.error(error)
-        return undefined
+        return { success: false, message: error }
     }
 }
 
-const fetchUserPlaylistsTitles = async (db, uid) => {
+export const fetchUserPlaylistsTitles = async (uid) => {
     try {
         const playlistsRef = collection(db, `saved-playlists`, uid, 'playlists')
         const querySnapshot = await getDocs(playlistsRef)
 
         const playlistsNames = querySnapshot.docs.map((doc) => doc.id)
-        return playlistsNames
+
+        return {
+            success: true,
+            data: playlistsNames,
+            message: `${playlistsNames.length} playlist names returned`
+        }
     } catch (error) {
         console.error(error)
-        return undefined
+        return { success: false, message: error }
     }
 }
 
-const fetchUserPlaylistsSongs = async (db, uid, playlistName) => {
+export const fetchUserPlaylistsSongs = async (uid, playlistName) => {
+    let docSnapShot
     try {
         const docRef = doc(db, `saved-playlists`, uid, 'playlists', playlistName)
         const docSnap = await getDoc(docRef)
-        return docSnap.exists() ? docSnap.data() : undefined
+        docSnapShot = docSnap.exists() ? docSnap.data() : undefined
+        return { success: true, data: docSnapShot, message: `Fetched songs from ${playlistName}` }
     } catch (error) {
         console.error(error)
-        return undefined
+        return { success: false, data: undefined, message: error }
     }
 }
 
-const deleteplaylist = async (db, uid, playlistName) => {
+export const deleteplaylist = async (uid, playlistName) => {
     try {
         await deleteDoc(doc(db, `saved-playlists`, uid, 'playlists', playlistName))
-        return `Successfully Deleted - Playlist: ${playlistName} by user:${uid}`
+        return {
+            success: true,
+            message: `Successfully Deleted - Playlist: ${playlistName} by user:${uid}`
+        }
     } catch (error) {
         console.error(error)
-        return error
+        return { success: false, message: error }
     }
-}
-
-global.firebaseApp = app
-module.exports = {
-    signUp,
-    signIn,
-    passwordReset,
-    deleteUserAccount,
-    googleSignIn,
-    saveplaylist,
-    deleteplaylist,
-    fetchUserPlaylistsTitles,
-    fetchUserPlaylistsSongs,
 }

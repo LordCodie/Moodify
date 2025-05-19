@@ -7,6 +7,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Link } from "@tanstack/react-router"
 
 const mockSongsData = [
     {
@@ -53,39 +54,56 @@ const mockSongsData = [
     }
 ]
 
-export default function SongsTable() {
+export default function SongsTable({ songsData }) {
     return (
         <div className="flex justify-center items-center rounded-xl p-1 overflow-x-auto">
             <Table>
-                {/* <TableCaption>Playlist One</TableCaption> */}
 
-                <TableHeader>
-                    {/* <TableRow>
-                        <TableHead >Cover Image</TableHead>
-                        <TableHead>Song Info</TableHead>
-                    </TableRow> */}
-                </TableHeader>
+                <TableHeader></TableHeader>
 
-                <TableBody className="max-h-[300px] w-full block overflow-y-auto">
-                    {mockSongsData.map(track => (
-                        <TableRow key={track.id} className="border-0 hover:bg-[#F42C04] flex w-full">
+                {/* max-h-[300px] w-full block overflow-y-auto */}
+                <TableBody className="max-h-[350px] w-full block overflow-y-auto">
+                    {songsData?.map(({ album, artist, id, image, name, url }) => (
 
-                            <TableCell className="p-2 w-20">
-                                <img 
-                                src={track.coverImage} 
-                                alt={`${track.song} cover image by ${track.artist}`} 
-                                className="w-12 h-12 rounded object-cover"
-                                />
-                            </TableCell>
+                        <TableRow
+                            key={id}
+                            className="border-0 hover:bg-[#F42C04] flex w-full"
+                            asChild
+                        >
+                            <Link
+                                to={url}
+                                target="_blank"
+                                rel="noopener noreferrer">
 
-                            <TableCell className="p-2 align-middle">
-                                <div>
-                                <h3 className="font-semibold">{track.song}</h3>
-                                    <p className="text-sm text-gray-500">{track.artist}</p>
-                                    <p className="text-sm text-gray-400">{track.album}</p>
-                                </div>
-                            </TableCell>
+                                <>
+                                    <TableCell className="p-2 w-20">
+                                        <img
+                                            src={image}
+                                            alt={`${name} cover image by ${artist}`}
+                                            className="w-12 h-12 rounded object-cover"
+                                        />
+                                    </TableCell>
 
+                                    <TableCell className="p-2 align-middle">
+                                        <div>
+                                            <h3 className="font-semibold">{name}</h3>
+                                        </div>
+                                    </TableCell>
+
+                                    <TableCell className="p-2 align-middle">
+                                        <div>
+                                            <p className="text-sm text-gray-500">{artist}</p>
+                                        </div>
+                                    </TableCell>
+
+                                    <TableCell className="p-2 align-middle">
+                                        <div>
+                                            <p className="text-sm text-gray-400">{album}</p>
+                                        </div>
+                                    </TableCell>
+                                </>
+
+                            </Link>
                         </TableRow>
                     ))}
                 </TableBody>

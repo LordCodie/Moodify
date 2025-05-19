@@ -1,9 +1,17 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useUserSelections } from '@/context/userSelectionsContext'
-
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
+import React, { useEffect } from 'react'
+import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 
 export const Route = createFileRoute('/')({
+  beforeLoad: ({ context, location }) => {
+    if (context?.currentUser){
+      throw redirect({
+        to: '/dashboard',
+        search: { redirect: location.href }
+      })
+    }
+  },
   component: Index,
 })
 

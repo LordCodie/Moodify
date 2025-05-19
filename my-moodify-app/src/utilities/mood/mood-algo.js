@@ -1,15 +1,12 @@
-const Sentiment = require('sentiment')
-const dotenv = require("dotenv")
+import Sentiment from "sentiment"
 
 const sentiment = new Sentiment()
-const result = dotenv.config({ path: './tests/mood-algo-test/.env.mood-algo-test.test' })
 
-const openRouterApi = process.env.OPEN_ROUTER_API;
+const openRouterApi = import.meta.env.VITE_OPEN_ROUTER_API
 
-// console.log({ openRouterApi })
+// console.log({openRouterApi: openRouterApi})
 
-// -------------------- Sentiment Score -------------------------------
-
+// <-------------------- Sentiment Score ------------------------------->
 function mapSentimentToMood(score) {
   if (score > 4) return 'happy';
   if (score > 0) return 'chill';
@@ -17,9 +14,29 @@ function mapSentimentToMood(score) {
   if (score < 0) return 'sad';
   return null; // fallback needed
 }
+// <-------------------- Sentiment Score ------------------------------->
 
-// -------------------- Sentiment.js -------------------------------
+// <-------------------- Sentiment.js ------------------------------->
+const getMoodFromText = async (userText) => {
+  // 1) Quick local pass
+  let analysis = sentiment.analyze(userText)
+  console.log(`🧠 Sentiment.js scored: ${analysis.score}`)
 
+  // 2) If ambiguous, ask the LLM to "be" sentiment.js
+  // if (mapSentimentToMood(analysis.score) === null){
+  //   console.log(`🤔 Sentiment unclear — falling back to LLM-emulated Sentiment.js…`)
+  //   analysis = await askLLMForMood(userText)
+  //   console.log(`💬 LLM-emulated score: ${analysis.score}`)
+  // }
+
+  // 3) Map that final score into your mood buckets
+  const mood = mapSentimentToMood(analysis.score)
+  console.log(`🎯 Final mood: ${mood}`)
+  return mood
+}
+// <-------------------- Sentiment.js ------------------------------->
+
+// <-------------------- Additional Parameters ------------------------------->
 const genreKeywords = {
   rock: ['guitar', 'drums', 'mosh', 'riff', 'distortion', 'amp', 'solo'],
   hiphop: ['beats', 'flow', 'rhyme', 'hip hop', 'rap', 'MC', 'scratch'],
@@ -42,47 +59,6 @@ const genreKeywords = {
   gospel: ['gospel', 'choir', 'amen', 'worship', 'hymn', 'spirit'],
 }
 
-const getMoodFromText = async (userText) => {
-  // 1) Quick local pass
-  let analysis = sentiment.analyze(userText)
-  console.log(`🧠 Sentiment.js scored: ${analysis.score}`)
-
-  // 2) If ambiguous, ask the LLM to "be" sentiment.js
-  // if (mapSentimentToMood(analysis.score) === null){
-  //   console.log(`🤔 Sentiment unclear — falling back to LLM-emulated Sentiment.js…`)
-  //   analysis = await askLLMForMood(userText)
-  //   console.log(`💬 LLM-emulated score: ${analysis.score}`)
-  // }
-
-  // 3) Map that final score into your mood buckets
-  const mood = mapSentimentToMood(analysis.score)
-  console.log(`🎯 Final mood: ${mood}`)
-  return mood
-}
-
-// -------------------- Additional Parameters ------------------------------- 
-
-// (leaving this out)
-const indexedDBData = [
-  {
-    createdAt: '2025-04-26T17:37:45.243Z',
-    requests: [ 'Drake', 'Hip-hop' ]  
-  },
-  {
-    createdAt: '2025-04-26T17:37:45.248Z',
-    requests: [ 'SZA', 'R&B' ]  
-  },
-  {
-    createdAt: '2025-04-26T17:37:45.243Z',
-    requests: [ 'Drake', 'Hip-hop' ]  
-  }
-]
-
-// (leaving this out)
-const detectBias = () => {
-
-} 
-
 const detectGenre = (text) => {
   const lc = text.toLowerCase()
   for (const [genre, words] of Object.entries(genreKeywords)) {
@@ -102,9 +78,9 @@ const extractArtists = (text) => {
 
   return artists
 }
+// <-------------------- Additional Parameters ------------------------------->
 
-// -------------------- LLM -------------------------------
-
+// <-------------------- LLM ------------------------------->
 const askLLMForMood = async (userText) => {
   const systemPrompt = `
     You are a drop-in replacement for the JavaScript library Sentiment.js.
@@ -167,36 +143,90 @@ const askLLMForMood = async (userText) => {
   return reply
 }
 
-const parseRecommendationLog = async (logText) => {
-  // 1) Pull out both JSON code-blocks
-  const jsonBlocks = [...logText.matchAll(/```json\s*([\s\S]*?)```/g)]
-    .map(match => match[1].trim())
+const parseRecommendationLog = (logText) => {
+  // Normalize line breaks and trim
+  const lines = logText
+    .split(/\r?\n/)
+    .map(l => l.trim())
+    .filter(l => l.length > 0);
 
-  if (jsonBlocks.length < 1) {
-    throw new Error('Expected two JSON blocks (sentiment & artist).')
+  let sentimentJson, artistJson, genre;
+
+  // Case A: fenced JSON blocks
+  const fences = [...logText.matchAll(/```json\s*([\s\S]*?)```/g)].map(m => m[1].trim());
+  if (fences.length >= 2) {
+    sentimentJson = fences[0].replace(/\[\s*\.\.\.\s*\]/g, '[]').replace(/\.{3}/g, '');
+    artistJson    = fences[1];
+    // try to pull genre with the same regex
+    const genreMatch = logText.match(/\*\*genre classification:\*\*\s*([^\s]+)/i);
+    genre = genreMatch ? genreMatch[1] : null;
+  } else {
+    // Case B: inline JSON + plain genre line
+    // Expecting:
+    //   line0 = {"score":...}
+    //   line1 = hiphop       <-- genre
+    //   line2 = {"artists":[...]}
+    if (lines.length < 3) {
+      throw new Error('Log must have at least 3 non-empty lines (sentiment JSON, genre, artist JSON).');
+    }
+    sentimentJson = lines[0];
+    genre         = lines[1];
+    artistJson    = lines[2];
   }
 
-  // 2) Clean the sentiment block of any ellipsis placeholders
-  let sentimentStr = jsonBlocks[0]
-    .replace(/\[\s*\.\.\.\s*\]/g, '[]')
-    .replace(/\.{3}/g, '')
+  // Parse!
+  let score, artists;
+  try {
+    score   = JSON.parse(sentimentJson);
+    ({ artists } = JSON.parse(artistJson));
+  } catch (err) {
+    throw new Error(`Invalid JSON detected: ${err.message}`);
+  }
 
-  // 2) Parse sentiment & artist JSON
-  const score = JSON.parse(sentimentStr)
-  const { artists } = JSON.parse(jsonBlocks[1])
+  return { score, artists, genre };
+};
 
-  // 3) Grab the plain-text genre line
-  const genreMatch = logText.match(
-    /\*\*genre classification:\*\*\s*([^\s]+)/i
-  )
-  const genre = genreMatch ? genreMatch[1].trim() : null
+// <-------------------- LLM ------------------------------->
 
-  return { score, artists, genre }
+export const compileMood = async (text = '') => {
+  let sentimentMood, llm
+
+  // 1.1 Sentiment
+  sentimentMood = await getMoodFromText(text)
+
+  // 1.2 LLM Extratcion 
+  if (sentimentMood === null) {
+    console.log(`🤔 Sentiment unclear — falling back to LLM-emulated Sentiment.js…`)
+    llm = await askLLMForMood(text)
+    // console.log(`llm return: ${llm}`)
+    // sentimentMood = parseRecommendationLog(llm)
+    // console.log(`💬 LLM-emulated score: ${JSON.stringify(sentimentMood, null, 2)}`)
+    const {
+      score: { score: numericScore, comparative },
+      artists,
+      genre
+    } = parseRecommendationLog(llm)
+    sentimentMood = mapSentimentToMood(numericScore)
+    console.log('Numeric score:', numericScore)
+    // console.log('Comparative score:', comparative)
+    // console.log('Artists:', artists)
+    // console.log('Genre:', genre)
+  }
+
+  // 2. Extracted Genre 
+  const extGenre = detectGenre(text)
+
+  // 3. Extracted Artist
+  const extArtist = extractArtists(text)
+
+  return {
+    sentimentMood,
+    extGenre,
+    extArtist
+  }
 }
 
 // Expected output:
 // 1. Score (including map)
-// 2. Artist 
+// 2. Artist
 // 3. Genre
-
-module.exports = { askLLMForMood, getMoodFromText, detectGenre, extractArtists, parseRecommendationLog, detectBias }

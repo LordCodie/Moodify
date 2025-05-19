@@ -11,9 +11,9 @@ const config = {
       testTimeout: 30000,
     },
     {
-      displayName: 'spotify',
-      testMatch: ['<rootDir>/tests/spotify-test/**/*.test.js'],
-      setupFiles: ['<rootDir>/tests/spotify-test/jest.setup.js'],
+      displayName: 'api-response',
+      testMatch: ['<rootDir>/tests/api-response-test/**/*.test.js'],
+      setupFiles: ['<rootDir>/tests/api-response-test/jest.setup.js'],
       testEnvironment: "node",
       testTimeout: 30000,
     },
@@ -23,6 +23,12 @@ const config = {
       setupFiles: ['<rootDir>/tests/mood-algo-test/jest.setup.js'],
       testEnvironment: "node",
       testTimeout: 30000,
+    },
+    {
+      displayName: 'user-test',
+      testMatch: ['<rootDir>/tests/user-test/**/*.test.js'],
+      setupFiles: ['<rootDir>/tests/user-test/jest.setup.js'],
+      testEnvironment: "jsdom",
     }
   ]
 }

@@ -15,5 +15,28 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src")
     }
+  },
+  build: {
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
+  },
+  server: {
+    proxy: {
+      '/spotify': {
+        target: 'https://accounts.spotify.com/',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/spotify/, '')
+      }
+    },
+    watch: {
+      ignored: ['**/node_modules/**','**/dist/**'],
+      usePolling: true,
+      interval: 500
+    }
   }
 })
