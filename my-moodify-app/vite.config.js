@@ -3,6 +3,7 @@ import path from "path"
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import strip from "@rollup/plugin-strip"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -26,6 +27,15 @@ export default defineConfig({
     // }
     esbuild: {
       drop: ['console', 'debugger']
+    },
+    rollupOptions: {
+      plugins: [
+        strip({
+          include: ["**/*.(js|ts|jsx|tsx)"],
+          functions: ["console.*"],
+          debugger: true,
+        })
+      ]
     }
   },
   server: {
